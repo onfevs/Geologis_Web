@@ -7,7 +7,7 @@ const ReviewsSection: React.FC = () => {
     <div>
       <div className="mb-24 text-center">
         <span className="text-zinc-500 text-[10px] uppercase tracking-[0.6em] mb-4 block">Capítulo III</span>
-        <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 italic">Testimonios de Confianza</h2>
+        <h2 className="text-4xl md:text-5xl font-title text-white mb-6 italic">Testimonios de Confianza</h2>
         <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
       </div>
 
@@ -33,8 +33,8 @@ const ReviewsSection: React.FC = () => {
 
             {/* Testimonial Content */}
             <blockquote className="relative mb-12">
-              <span className="absolute -top-6 -left-4 text-6xl font-serif text-white/5 pointer-events-none">“</span>
-              <p className="text-zinc-300 text-xl md:text-2xl font-serif leading-relaxed italic relative z-10 group-hover:text-[#D4AF37] transition-colors duration-500">
+              <span className="absolute -top-6 -left-4 text-6xl font-title text-white/5 pointer-events-none">“</span>
+              <p className="text-zinc-300 text-xl md:text-2xl font-title leading-relaxed italic relative z-10 group-hover:text-[#D4AF37] transition-colors duration-500">
                 {review.content}
               </p>
             </blockquote>

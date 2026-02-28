@@ -54,7 +54,7 @@ const LoadingScreen: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <h2 className="text-white text-3xl md:text-4xl font-serif tracking-[0.4em] uppercase mb-4 italic">
+          <h2 className="text-white text-3xl md:text-4xl font-title tracking-[0.4em] uppercase mb-4 italic">
             OnfeVS <span className="text-[#D4AF37]">Geologis</span>
           </h2>
           <div className="flex flex-col items-center space-y-2">

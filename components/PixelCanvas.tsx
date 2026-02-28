@@ -96,8 +96,18 @@ class PixelCanvasElement extends HTMLElement {
       this._resizeObserver = new ResizeObserver(() => requestAnimationFrame(() => this.handleResize()));
       this._resizeObserver.observe(this);
     });
+
+    // Mouse Events for Desktop
     this._parent?.addEventListener("mouseenter", () => this.handleAnimation("appear"));
     this._parent?.addEventListener("mouseleave", () => this.handleAnimation("disappear"));
+
+    // Touch Events for Mobile
+    this._parent?.addEventListener("touchstart", () => this.handleAnimation("appear"), { passive: true });
+    this._parent?.addEventListener("touchend", () => {
+      // Small delay on touchend so the effect is visible before finger lifts completely
+      setTimeout(() => this.handleAnimation("disappear"), 500);
+    }, { passive: true });
+    this._parent?.addEventListener("touchcancel", () => this.handleAnimation("disappear"), { passive: true });
   }
 
   disconnectedCallback() {
@@ -123,7 +133,7 @@ class PixelCanvasElement extends HTMLElement {
     for (let x = 0; x < this.canvas.width; x += this.gap) {
       for (let y = 0; y < this.canvas.height; y += this.gap) {
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
-        const delay = this.variant === "icon" ? Math.sqrt(Math.pow(x - this.canvas.width/2, 2)) : Math.sqrt(Math.pow(x, 2) + Math.pow(this.canvas.height - y, 2));
+        const delay = this.variant === "icon" ? Math.sqrt(Math.pow(x - this.canvas.width / 2, 2)) : Math.sqrt(Math.pow(x, 2) + Math.pow(this.canvas.height - y, 2));
         this.pixels.push(new Pixel(this.canvas, this.ctx, x, y, color, this.speed, delay));
       }
     }
@@ -149,15 +159,12 @@ if (typeof window !== "undefined" && !customElements.get("pixel-canvas")) {
   customElements.define("pixel-canvas", PixelCanvasElement);
 }
 
-// Fix: Correctly define prop types for the PixelCanvas wrapper component
 export const PixelCanvas = ({ gap = 5, speed = 35, colors = ["#D4AF37", "#996515", "#FFD700"], variant = "default" }: { gap?: number; speed?: number; colors?: string[]; variant?: string }) => {
-  return (
-    <pixel-canvas
-      data-gap={gap}
-      data-speed={speed}
-      data-colors={colors.join(",")}
-      data-variant={variant}
-      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', width: '100%', height: '100%' }}
-    />
-  );
+  return React.createElement('pixel-canvas', {
+    'data-gap': gap,
+    'data-speed': speed,
+    'data-colors': colors.join(","),
+    'data-variant': variant,
+    style: { position: 'absolute', inset: 0, pointerEvents: 'none', width: '100%', height: '100%' }
+  });
 };

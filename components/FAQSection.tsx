@@ -10,7 +10,7 @@ const FAQSection: React.FC = () => {
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-24">
         <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.6em] mb-4 block font-black">Knowledge Base</span>
-        <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 italic">Preguntas Frecuentes</h2>
+        <h2 className="text-4xl md:text-5xl font-title text-white mb-6 italic">Preguntas Frecuentes</h2>
         <p className="text-zinc-500 font-light max-w-xl mx-auto">
           Resolvemos sus dudas técnicas sobre normatividad SIG, flujos de automatización y procesos de consultoría.
         </p>
@@ -34,7 +34,7 @@ const FAQSection: React.FC = () => {
                 }`}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className={`text-lg md:text-xl font-serif transition-all duration-500 ${
+                <span className={`text-lg md:text-xl font-title transition-all duration-500 ${
                   openIndex === i ? 'text-white translate-x-2' : 'text-zinc-400 group-hover:text-zinc-200'
                 }`}>
                   {faq.question}

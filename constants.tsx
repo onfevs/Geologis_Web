@@ -6,8 +6,8 @@ export const GOLD_COLORS = ["#D4AF37", "#F5D142", "#996515", "#FFD700"];
 export const HERO_KEYWORDS = ["SIG", "ANM / ANLA", "PYTHON", "LADM-COL", "GEOLOGÍA", "MINERÍA", "CATASTRO"];
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Sectores', href: '#sectores' },
   { label: 'Servicios', href: '#servicios' },
+  { label: 'Dominios', href: '#dominios' },
   { label: 'Proyectos', href: '#proyectos' },
   { label: 'Media', href: '#media' },
   { label: 'Testimonios', href: '#testimonios' },
@@ -41,21 +41,21 @@ export const SECTORS = [
     id: "mineria",
     title: "Minería",
     description: "Gestión de Títulos y Geodatabases ANM",
-    image: "https://images.unsplash.com/photo-1529439322271-42931c09bce1?auto=format&fit=crop&q=80&w=1200",
+    image: "/images/sector_mineria_1772070111064.png",
     href: "#mineria"
   },
   {
     id: "medioambiente",
     title: "Medio Ambiente",
     description: "Estudios de Impacto y Licenciamiento ANLA",
-    image: "https://images.unsplash.com/photo-1511497584788-8767fe771d21?auto=format&fit=crop&q=80&w=1200",
+    image: "/images/sector_ambiente_1772070327635.png",
     href: "#medioambiente"
   },
   {
     id: "catastro",
     title: "Catastro",
     description: "LADM-COL y Planeación Territorial",
-    image: "https://images.unsplash.com/photo-1544383335-96575199581a?auto=format&fit=crop&q=80&w=1200",
+    image: "/images/sector_catastro_1772070548686.png",
     href: "#catastro"
   }
 ];
@@ -64,37 +64,37 @@ export const PROJECTS: Project[] = [
   {
     title: "GDB Automática Minera",
     category: "Python + SIG",
-    image: "https://images.unsplash.com/photo-1579541814924-49fef17c5be5?auto=format&fit=crop&q=80&w=800",
+    image: "/images/project_gdb_1772070758017.png",
     result: "Reducción del 70% en tiempo de entrega de reportes."
   },
   {
     title: "Susceptibilidad ANLA",
     category: "Ambiental",
-    image: "https://images.unsplash.com/photo-1501854140801-50d01674aa3e?auto=format&fit=crop&q=80&w=800",
+    image: "/images/project_anla_1772071188270.png",
     result: "Precisión del 95% validada por ANLA."
   },
   {
     title: "Catastro Multipropósito",
     category: "LADM-COL",
-    image: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800",
+    image: "/images/project_catastro_1772071295702.png",
     result: "Integración de 12,000 folios geográficos."
   },
   {
     title: "Dashboard de Sondajes",
     category: "Geología",
-    image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=800",
+    image: "/images/dashboard.jpg",
     result: "Visualización 3D interactiva en tiempo real."
   },
   {
     title: "ETL de Datos Masivos",
     category: "Data Engineering",
-    image: "https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&q=80&w=800",
+    image: "/images/gdb.jpg",
     result: "Migración de 1M de registros geocodificados."
   },
   {
     title: "Mapeo Geomorfológico",
     category: "Consultoría",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
+    image: "/images/geomorfologico.jpg",
     result: "Definición de zonas de riesgo para POT."
   }
 ];
@@ -176,28 +176,26 @@ export const FAQS: FAQItem[] = [
     answer: "Sí, desarrollamos herramientas 'In-house' a medida para nuestros clientes que necesitan optimizar procesos recurrentes, como la generación automática de formatos de campo o el cálculo de áreas de compensación ambiental."
   }
 ];
-
 export const YOUTUBE_VIDEOS: YoutubeVideo[] = [
   {
-    id: "video1",
-    title: "Dominando la GDB de la ANM",
-    description: "Guía técnica para la estructuración y validación topográfica de títulos mineros.",
-    thumbnail: "https://images.unsplash.com/photo-1557425955-df376b5903c8?auto=format&fit=crop&q=80&w=800"
+    id: 'gNpw1xLXXqg',
+    title: '¿CÓMO CREAR UNA GDB DE LA ANM? PASO A PASO',
+    description: 'Guía técnica para la estructuración y validación topográfica de títulos mineros bajo la Resolución 504 de 2018.',
+    thumbnail: `https://i.ytimg.com/vi/gNpw1xLXXqg/hqdefault.jpg`
   },
   {
-    id: "video2",
-    title: "Python para Geoprocesos",
-    description: "Cómo automatizar el flujo de trabajo entre QGIS y ArcGIS Pro usando ArcPy.",
-    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800"
+    id: '2VtYcI6G-EE',
+    title: 'Creación de Cuadrículas Mineras y Áreas Libres en ArcGIS',
+    description: 'Método para definir cuadrículas y áreas de retención en proyectos mineros ANM.',
+    thumbnail: `https://i.ytimg.com/vi/2VtYcI6G-EE/hqdefault.jpg`
   },
   {
-    id: "video3",
-    title: "Modelamiento LADM-COL",
-    description: "Implementación técnica del modelo de dominio para catastro multipropósito.",
-    thumbnail: "https://images.unsplash.com/photo-1504384308090-c89eececbfbc?auto=format&fit=crop&q=80&w=800"
+    id: 'Js9nzfUmtWc',
+    title: 'Automatización de Reportes y Formularios de Campo',
+    description: 'Integración de encuestas de campo en QGIS y bases de datos centralizadas.',
+    thumbnail: `https://i.ytimg.com/vi/Js9nzfUmtWc/hqdefault.jpg`
   }
 ];
 
-export const YOUTUBE_URL = "https://www.youtube.com/channel/UCuw7tG2Ve01P9yu4J6JzwXg";
+export const YOUTUBE_URL = "https://www.youtube.com/@OnfeVS";
 export const HERO_STATIC_URL = "https://dvhzxuyeczsymbcftucd.supabase.co/storage/v1/object/sign/Web/1.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xZWI4NjM4Ni00MGVhLTQwMGAbOGJhNy0yZDQwZGRjOWI1NjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJXZWIvMS5wbmciLCJpYXQiOjE3NjkyMTYzMDksImV4cCI6MzM0NjAxNjMwOX0.9wl_aCajPLKcdc5CQIfu8b7Ylhd0UHUh_X0OIbAo20A";
-export const HERO_BG_URL = "https://dvhzxuyeczsymbcftucd.supabase.co/storage/v1/object/sign/Web/81feb0f0-8a0e-4220-b681-b78c76a9dd1c-ezgif.com-video-to-webp-converter.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xZWI4NjM4Ni00MGVhLTQwMGItOGJhNy0yZDQwZGRjOWI1NjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJXZWIvODFmZWIwZjAtOGEwZS00MjIwLWI2ODEtYjc4Yzc2YTlkZDFjLWV6Z2lmLmNvbS12aWRlby10by13ZWJwLWNvbnZlcnRlci53ZWJwIiwiaWF0IjoxNzY5MjE1OTIyLCJleHAiOjMzNDYwMTU5MjJ9.AQvQnOBmmx08mosRqS11Hip1a_yO4FDzlJkC1DlRQPM";

@@ -1,51 +1,217 @@
-
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="OnfeVS Geologis | Ingeniería SIG y Automatización Premium en Colombia">
-    <title>OnfeVS | Geologis Premium</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
-    <style>
-      body {
-        margin: 0;
-        background-color: #000;
-        color: #fff;
-        font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      @media (min-width: 1024px) {
-        body, a, button, input, textarea, [role="button"] {
-          cursor: none !important;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="OnfeVS Geologis | Ingeniería SIG y Automatización Premium en Colombia">
+  <title>OnfeVS | Geologis Premium</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP + ScrollTrigger – animaciones premium -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            title: ['"Playfair Display"', 'serif'],
+            subtitle: ['"Outfit"', 'sans-serif'],
+            body: ['"Inter"', 'sans-serif'],
+          }
         }
       }
-      .font-serif {
-        font-family: 'Playfair Display', serif;
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (min-width: 1024px) {
+
+      body,
+      a,
+      button,
+      input,
+      textarea,
+      [role="button"] {
+        cursor: none !important;
       }
-      ::-webkit-scrollbar {
-        width: 5px;
+    }
+
+    .font-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .font-subtitle {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+    }
+
+    /* NOTE: backface-visibility removed from * selector — it breaks 3D flip cards */
+    .will-change-transform {
+      will-change: transform, opacity;
+    }
+
+    /* ══════════════════════════════════════════════════
+       FLIP CARD — Premium GSAP-ready
+    ══════════════════════════════════════════════════ */
+    .flip-card-container {
+      perspective: 1600px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.85s cubic-bezier(0.23, 1, 0.32, 1);
+      border-radius: 1rem;
+      will-change: transform;
+    }
+
+    .flip-card-container:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-container:hover {
+      filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.22));
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Shimmer on back face */
+    .flip-card-back::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          transparent 40%,
+          rgba(212, 175, 55, 0.04) 50%,
+          transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Golden Filter — desvanece  al hacer hover */
+    .gold-filter {
+      filter: sepia(70%) saturate(180%) brightness(62%) hue-rotate(-8deg);
+      transition: filter 0.65s ease;
+    }
+
+    .flip-card-container:hover .gold-filter {
+      filter: sepia(5%) saturate(110%) brightness(98%);
+    }
+
+    /* Flip hint icon */
+    .flip-hint-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+    }
+
+    .flip-card-container:hover .flip-hint-icon {
+      background: rgba(212, 175, 55, 0.22);
+      border-color: rgba(212, 175, 55, 0.65);
+      transform: rotate(180deg);
+    }
+
+    /* ══════════════════════════════════════════════════
+       MAPA LEAFLET — Ocultar Atribución y Controles
+    ══════════════════════════════════════════════════ */
+    .leaflet-control-container,
+    .leaflet-bottom.leaflet-right {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* ══════════════════════════════════════════════════
+       HAMBURGER GSAP — líneas animadas
+    ══════════════════════════════════════════════════ */
+    .hamburger-line {
+      display: block;
+      width: 24px;
+      height: 2px;
+      border-radius: 2px;
+      background: #ffffff;
+      transform-origin: center;
+    }
+
+
+
+    /* Animación para el carrusel infinito */
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
       }
-      ::-webkit-scrollbar-track {
-        background: #000;
+
+      100% {
+        transform: translateX(-50%);
       }
-      ::-webkit-scrollbar-thumb {
-        background: #D4AF37;
-      }
-      * {
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-      }
-      .will-change-transform {
-        will-change: transform, opacity;
-      }
-    </style>
+    }
+
+    .animate-scroll {
+      animation: scroll 30s linear infinite;
+    }
+
+    .animate-scroll:hover {
+      animation-play-state: paused;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -57,10 +223,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>
