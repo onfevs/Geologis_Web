@@ -1,6 +1,21 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+
+// Fuerza a Leaflet a recalcular el tamaño tras el montaje
+// (necesario cuando el padre usa aspect-ratio en lugar de height fija)
+const MapResizer: React.FC = () => {
+  const map = useMap();
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => map.invalidateSize(), 100),
+      setTimeout(() => map.invalidateSize(), 400),
+      setTimeout(() => map.invalidateSize(), 900),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [map]);
+  return null;
+};
 
 const MapSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -59,9 +74,10 @@ const MapSection: React.FC = () => {
             zoom={14}
             scrollWheelZoom={false}
             attributionControl={false}
-            style={{ height: '100%', width: '100%', background: '#0a0a0a' }}
+            style={{ height: '100%', minHeight: '320px', width: '100%', background: '#0a0a0a' }}
             className={`transition-all duration-700 ${isHovered ? 'pointer-events-auto' : 'pointer-events-none'}`}
           >
+            <MapResizer />
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             />

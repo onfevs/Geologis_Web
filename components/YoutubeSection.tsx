@@ -52,6 +52,8 @@ const YtThumbnail: React.FC<{ videoId: string; alt: string; className?: string }
       src={sources[srcIdx]}
       alt={alt}
       className={className}
+      referrerPolicy="no-referrer"
+      crossOrigin="anonymous"
       onError={() => {
         if (srcIdx < sources.length - 1) setSrcIdx(i => i + 1);
       }}

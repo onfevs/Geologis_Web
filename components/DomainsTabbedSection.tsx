@@ -3,6 +3,7 @@ import { PixelCanvas } from './PixelCanvas';
 import SectionHeader from './SectionHeader';
 import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import PremiumMuniCard from './PremiumMuniCard';
 
 // Fix para mapas en tabs y animaciones (Leaflet no calcula bien cuando está oculto/animado)
 const MapResizer: React.FC<{ isFlipped?: boolean }> = ({ isFlipped }) => {
@@ -27,7 +28,7 @@ interface MunicipalData { name: string; dept: string; rural: number; urban: numb
 interface IcaProject { name: string; scope: string; }
 interface MineriaKpi { label: string; value: string; detail: string; }
 type MuniStatus = 'finalizado' | 'en_proceso';
-interface CatastroMuni extends MunicipalData { status: MuniStatus; }
+export interface CatastroMuni extends MunicipalData { status: MuniStatus; }
 
 interface NormRef { code: string; title: string; entity: string; year: string; color: string; }
 
@@ -51,12 +52,12 @@ const NORM_CATASTRO: NormRef[] = [
 // ─── Data: Catastro ───────────────────────────────────────────────────────────
 
 const CATASTRO_MUNICIPIOS: CatastroMuni[] = [
-    { name: 'El Retiro', dept: 'Antioquia', rural: 10046, urban: 8443, role: 'Consolidador SIG', status: 'finalizado', image: '/images/catastro/ElRetiro.jpg', lat: 6.0594, lng: -75.5028 },
-    { name: 'Filandia', dept: 'Quindío', rural: 2502, urban: 2578, status: 'finalizado', image: '/images/catastro/Filandia.jpg', lat: 4.6738, lng: -75.6669 },
-    { name: 'Quimbaya', dept: 'Quindío', rural: 2640, urban: 2004, status: 'finalizado', image: '/images/catastro/Quimbaya.jpg', lat: 4.6214, lng: -75.7600 },
-    { name: 'Montenegro', dept: 'Quindío', rural: 2614, urban: 1780, status: 'finalizado', image: '/images/catastro/Montenegro.jpg', lat: 4.5678, lng: -75.7500 },
+    { name: 'El Retiro', dept: 'Antioquia', rural: 9031, urban: 3767, role: 'Consolidador SIG', status: 'finalizado', image: '/images/catastro/ElRetiro.jpg', lat: 6.0594, lng: -75.5028 },
+    { name: 'Filandia', dept: 'Quindío', rural: 2480, urban: 2539, status: 'finalizado', image: '/images/catastro/Filandia.jpg', lat: 4.6738, lng: -75.6669 },
+    { name: 'Quimbaya', dept: 'Quindío', rural: 6643, urban: 2265, status: 'finalizado', image: '/images/catastro/Quimbaya.jpg', lat: 4.6214, lng: -75.7600 },
+    { name: 'Montenegro', dept: 'Quindío', rural: 9516, urban: 2208, status: 'finalizado', image: '/images/catastro/Montenegro.jpg', lat: 4.5678, lng: -75.7500 },
     { name: 'San Vicente de Ferrer', dept: 'Antioquia', rural: 2200, urban: 900, status: 'finalizado', image: '/images/catastro/ElRetiro.jpg', lat: 6.2800, lng: -75.3269 },
-    { name: 'Barrancabermeja', dept: 'Santander', rural: 14200, urban: 29800, status: 'en_proceso', image: '/images/catastro/Barranca.jpg', lat: 7.0653, lng: -73.8547 },
+    { name: 'Barrancabermeja', dept: 'Santander', rural: 4824, urban: 42442, status: 'en_proceso', image: '/images/catastro/Barranca.jpg', lat: 7.0653, lng: -73.8547 },
     { name: 'Calarcá', dept: 'Quindío', rural: 6800, urban: 8200, status: 'en_proceso', image: '/images/catastro/Calarca.jpg', lat: 4.5247, lng: -75.6425 },
 ];
 
@@ -216,217 +217,6 @@ const AnlaStats: React.FC<{ go: boolean }> = ({ go }) => (
 
 // ─── STATS: Catastro — FLIP CARDS ─────────────────────────────────────────────
 
-const MuniCard: React.FC<{ m: CatastroMuni; go: boolean }> = ({ m, go }) => {
-    const total = m.rural + m.urban;
-    const ruralPct = Math.round((m.rural / total) * 100);
-    const myShare = Math.round(total / 6);
-    const isProc = m.status === 'en_proceso';
-    const [isFlipped, setIsFlipped] = useState(false);
-
-    return (
-        <div
-            className="flip-card-container w-full h-[340px]"
-            onMouseEnter={() => setIsFlipped(true)}
-            onMouseLeave={() => setIsFlipped(false)}
-        >
-            <div className="flip-card-inner">
-
-                {/* ══════ FRENTE ══════ */}
-                <div className="flip-card-front" style={{
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                }}>
-                    {/* Imagen con filtro dorado */}
-                    <img
-                        src={m.image || '/images/catastro.jpg'}
-                        alt={m.name}
-                        className="gold-filter"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
-
-                    {/* Difuminado negro para legibilidad de textos (User feedback) */}
-                    <div style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 30%, transparent 60%)',
-                        pointerEvents: 'none'
-                    }} />
-
-                    {/* Ícono flip en esquina */}
-                    <div className="flip-hint-icon">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                            <path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                        </svg>
-                    </div>
-
-                    {/* Status badge */}
-                    {isProc && (
-                        <div style={{
-                            position: 'absolute', top: 14, left: 14,
-                            display: 'flex', alignItems: 'center', gap: 5,
-                            background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)',
-                            border: '1px solid rgba(251,191,36,0.4)', borderRadius: 99,
-                            padding: '3px 8px',
-                        }}>
-                            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FCD34D', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
-                            <span style={{ color: '#FCD34D', fontSize: '0.55rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em' }}>En proceso</span>
-                        </div>
-                    )}
-
-                    {/* Gradiente + texto inferior */}
-                    <div style={{
-                        position: 'absolute', inset: 0,
-                        background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 45%, transparent 100%)',
-                        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-                        padding: '18px 18px 14px',
-                    }}>
-                        <p style={{ color: '#fff', fontFamily: '"Playfair Display", serif', fontWeight: 900, fontSize: '1.25rem', lineHeight: 1.15, margin: 0 }}>
-                            {m.name}
-                        </p>
-                        <p style={{ color: '#D4AF37', fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.28em', fontWeight: 700, marginTop: 4 }}>
-                            {m.dept}
-                        </p>
-                    </div>
-                </div>
-
-                {/* ══════ REVERSO ══════ */}
-                <div className="flip-card-back" style={{
-                    background: '#09090b',
-                    border: '1px solid rgba(212,175,55,0.2)',
-                    boxShadow: '0 8px 32px rgba(212,175,55,0.08)',
-                    display: 'flex',
-                    flexDirection: 'column'
-                }}>
-
-                    {/* PREMIUM MAP BACKGROUND (Interactive disabled to behave as bg) */}
-                    <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.35 }}>
-                        <MapContainer
-                            center={[m.lat, m.lng]}
-                            zoom={13}
-                            attributionControl={false}
-                            zoomControl={false}
-                            dragging={false}
-                            scrollWheelZoom={false}
-                            doubleClickZoom={false}
-                            style={{ height: '100%', width: '100%', background: '#0a0a0a' }}
-                        >
-                            <MapResizer isFlipped={isFlipped} />
-                            <TileLayer
-                                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                            />
-                            <CircleMarker
-                                center={[m.lat, m.lng]}
-                                radius={6}
-                                pathOptions={{ color: '#D4AF37', fillColor: '#D4AF37', fillOpacity: 0.7 }}
-                            />
-                        </MapContainer>
-                        {/* Overlay to fade out map at the bottom text area */}
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(9,9,11,0.2) 0%, rgba(9,9,11,0.6) 40%, rgba(9,9,11,0.95) 85%)', zIndex: 1 }} />
-                    </div>
-
-                    {/* Contenido Reverso (Z-index superior para estar sobre el mapa) */}
-                    <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10 }}>
-                        <div>
-                            <div style={{
-                                width: 28, height: 2,
-                                background: 'linear-gradient(to right, #D4AF37, transparent)',
-                                marginBottom: 6
-                            }} />
-                            <p style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem', margin: 0, lineHeight: 1.2 }}>{m.name}</p>
-                            <p style={{ color: '#71717a', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 2 }}>{m.dept}</p>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end' }}>
-                            {m.role && (
-                                <span style={{
-                                    fontSize: '0.5rem', padding: '2px 7px', borderRadius: 99,
-                                    border: '1px solid rgba(212,175,55,0.5)', color: '#D4AF37',
-                                    fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em',
-                                    background: 'rgba(212,175,55,0.08)'
-                                }}>
-                                    {m.role}
-                                </span>
-                            )}
-                            {isProc && (
-                                <span style={{
-                                    fontSize: '0.5rem', padding: '2px 7px', borderRadius: 99,
-                                    border: '1px solid rgba(251,191,36,0.4)', color: '#FCD34D',
-                                    fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em',
-                                    background: 'rgba(251,191,36,0.06)'
-                                }}>
-                                    En proceso
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Barra Rural / Urbano */}
-                    <div style={{ marginBottom: 10, padding: '0 16px', position: 'relative', zIndex: 10 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                            <span style={{ color: '#71717a', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Composición predial</span>
-                        </div>
-                        <div style={{ display: 'flex', height: 7, borderRadius: 99, overflow: 'hidden', background: '#1f1f1f', gap: 1 }}>
-                            <div style={{
-                                height: '100%', width: go ? `${ruralPct}%` : '0%',
-                                background: 'linear-gradient(to right, rgba(212,175,55,0.3), rgba(212,175,55,0.55))',
-                                transition: 'width 1.4s cubic-bezier(0.23,1,0.32,1)',
-                            }} />
-                            <div style={{
-                                height: '100%', width: go ? `${100 - ruralPct}%` : '0%',
-                                background: 'linear-gradient(to right, #C9A227, #F5D142)',
-                                transition: 'width 1.4s cubic-bezier(0.23,1,0.32,1) 0.12s',
-                            }} />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-                            <span style={{ color: '#52525b', fontSize: '0.58rem' }}>Rural {ruralPct}%</span>
-                            <span style={{ color: '#52525b', fontSize: '0.58rem' }}>Urbano {100 - ruralPct}%</span>
-                        </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10, margin: '0 16px', position: 'relative', zIndex: 10 }} />
-
-                    {/* Datos: Rural + Urbano */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 12px', marginBottom: 10, padding: '0 16px', position: 'relative', zIndex: 10 }}>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '7px 10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Rural</p>
-                            <p style={{ color: '#d4d4d8', fontSize: '0.95rem', fontWeight: 700, margin: '2px 0 0', lineHeight: 1 }}>
-                                {m.rural.toLocaleString('es-CO')}
-                            </p>
-                        </div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '7px 10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Urbano</p>
-                            <p style={{ color: '#d4d4d8', fontSize: '0.95rem', fontWeight: 700, margin: '2px 0 0', lineHeight: 1 }}>
-                                {m.urban.toLocaleString('es-CO')}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10, margin: '0 16px', position: 'relative', zIndex: 10 }} />
-
-                    {/* Total + Aporte */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 16px 16px', position: 'relative', zIndex: 10 }}>
-                        <div>
-                            <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Total Predios</p>
-                            <p style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 900, margin: '2px 0 0', lineHeight: 1 }}>
-                                {total.toLocaleString('es-CO')}
-                            </p>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                            <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Mi aporte ⅙</p>
-                            <p style={{ color: '#D4AF37', fontSize: '1.25rem', fontWeight: 900, margin: '2px 0 0', lineHeight: 1 }}>
-                                ~{myShare.toLocaleString('es-CO')}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    );
-};
-
 const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
     const finalizados = CATASTRO_MUNICIPIOS.filter(m => m.status === 'finalizado');
     const enProceso = CATASTRO_MUNICIPIOS.filter(m => m.status === 'en_proceso');
@@ -510,7 +300,7 @@ const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
                     className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"
                 >
                     {finalizados.map((m, i) => (
-                        <MuniCard key={i} m={m} go={go} />
+                        <PremiumMuniCard key={i} m={m} go={go} />
                     ))}
                 </div>
             </div>
@@ -531,7 +321,7 @@ const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
                     className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
                     {enProceso.map((m, i) => (
-                        <MuniCard key={i} m={m} go={go} />
+                        <PremiumMuniCard key={i} m={m} go={go} />
                     ))}
                 </div>
             </div>
