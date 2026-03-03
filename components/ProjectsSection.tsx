@@ -49,8 +49,8 @@ const ProjectsSection: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-end mb-16 px-2">
         <div className="max-w-2xl">
           <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.6em] mb-4 block font-black">Success Stories</span>
-          <h2 className="text-4xl md:text-5xl font-title text-white mb-6">Casos de Éxito & <span className="text-[#D4AF37]">Resultados</span>.</h2>
-          <p className="text-zinc-400 font-light leading-relaxed max-w-xl">
+          <h2 className="text-4xl md:text-5xl font-title text-zinc-900 dark:text-white mb-6 transition-colors">Casos de Éxito & <span className="text-[#D4AF37]">Resultados</span>.</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 font-light leading-relaxed max-w-xl transition-colors">
             Explora nuestra trayectoria. El carrusel se mueve automáticamente, pero puedes tomar el control total usando las flechas o deslizando.
           </p>
         </div>
@@ -59,14 +59,14 @@ const ProjectsSection: React.FC = () => {
         <div className="flex space-x-6 mt-10 md:mt-0 z-30">
           <button
             onClick={() => scroll('left')}
-            className="group w-16 h-16 border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-700 rounded-full bg-black/40 backdrop-blur-sm shadow-xl"
+            className="group w-16 h-16 border border-zinc-300 dark:border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white dark:hover:text-black transition-all duration-700 rounded-full bg-white/70 dark:bg-black/40 backdrop-blur-sm shadow-xl"
             aria-label="Ver anterior"
           >
             <span className="text-2xl group-hover:-translate-x-1.5 transition-transform duration-500">←</span>
           </button>
           <button
             onClick={() => scroll('right')}
-            className="group w-16 h-16 border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-700 rounded-full bg-black/40 backdrop-blur-sm shadow-xl"
+            className="group w-16 h-16 border border-zinc-300 dark:border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white dark:hover:text-black transition-all duration-700 rounded-full bg-white/70 dark:bg-black/40 backdrop-blur-sm shadow-xl"
             aria-label="Ver siguiente"
           >
             <span className="text-2xl group-hover:translate-x-1.5 transition-transform duration-500">→</span>
@@ -83,13 +83,15 @@ const ProjectsSection: React.FC = () => {
           {PROJECTS.map((project, i) => (
             <div
               key={i}
-              className="min-w-[320px] md:min-w-[580px] snap-start group/card relative bg-zinc-950 border border-zinc-900 overflow-hidden shadow-2xl transition-all duration-700 hover:border-[#D4AF37]/30 rounded-[2rem]"
+              className="min-w-[320px] md:min-w-[580px] snap-start group/card relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-900 overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.1)] dark:shadow-2xl transition-all duration-700 hover:border-[#D4AF37]/50 dark:hover:border-[#D4AF37]/30 rounded-[2rem]"
             >
               <div className="aspect-video overflow-hidden relative">
-                <div className="absolute inset-0 bg-transparent md:bg-black/50 md:group-hover/card:bg-transparent transition-all duration-1000 z-10 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-transparent md:bg-white/20 md:dark:bg-black/50 md:group-hover/card:bg-transparent transition-all duration-1000 z-10 pointer-events-none"></div>
                 <img
                   src={project.image}
-                  alt={project.title}
+                  alt={`Proyecto ${project.title} — ${project.category}`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover grayscale-0 opacity-100 md:grayscale md:group-hover/card:scale-110 md:group-hover/card:grayscale-0 transition-all duration-1000"
                 />
               </div>
@@ -97,13 +99,13 @@ const ProjectsSection: React.FC = () => {
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <p className="text-[10px] text-[#D4AF37] uppercase tracking-[0.4em] mb-3 font-black">{project.category}</p>
-                    <h3 className="text-white text-2xl md:text-3xl font-title">{project.title}</h3>
+                    <h3 className="text-zinc-900 dark:text-white text-2xl md:text-3xl font-title transition-colors">{project.title}</h3>
                   </div>
                 </div>
-                <div className="h-px w-full bg-zinc-900 mb-8 group-hover/card:bg-[#D4AF37]/40 transition-all duration-1000"></div>
-                <p className="text-zinc-400 text-sm md:text-base italic flex items-start">
+                <div className="h-px w-full bg-zinc-200 dark:bg-zinc-900 mb-8 group-hover/card:bg-[#D4AF37]/60 dark:group-hover/card:bg-[#D4AF37]/40 transition-all duration-1000"></div>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm md:text-base italic flex items-start transition-colors">
                   <span className="w-2 h-2 bg-[#D4AF37] rounded-full mr-4 mt-2 shrink-0 animate-pulse"></span>
-                  <span><span className="text-white font-bold not-italic mr-2">Impacto:</span> {project.result}</span>
+                  <span><span className="text-zinc-900 dark:text-white font-bold not-italic mr-2">Impacto:</span> {project.result}</span>
                 </p>
               </div>
 
@@ -115,13 +117,13 @@ const ProjectsSection: React.FC = () => {
         </div>
 
         {/* Sombras de profundidad lateral */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black via-black/60 to-transparent z-20 pointer-events-none"></div>
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black via-black/60 to-transparent z-20 pointer-events-none"></div>
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-50 via-zinc-50/60 dark:from-black dark:via-black/60 to-transparent z-20 pointer-events-none transition-colors duration-700"></div>
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-50 via-zinc-50/60 dark:from-black dark:via-black/60 to-transparent z-20 pointer-events-none transition-colors duration-700"></div>
       </div>
 
       <div className="mt-8 flex justify-center space-x-2">
         {PROJECTS.map((_, i) => (
-          <div key={i} className="w-8 h-0.5 bg-zinc-900 overflow-hidden">
+          <div key={i} className="w-8 h-0.5 bg-zinc-300 dark:bg-zinc-900 overflow-hidden transition-colors">
             <div className={`h-full bg-[#D4AF37] transition-all duration-1000 ${!isPaused ? 'w-full' : 'w-0'}`} style={{ transitionDelay: `${i * 100}ms` }}></div>
           </div>
         ))}

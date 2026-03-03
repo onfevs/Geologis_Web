@@ -6,11 +6,12 @@ interface SectionProps {
   children: React.ReactNode;
   bgColor?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-const Section: React.FC<SectionProps> = ({ id, children, bgColor = "bg-black", className = "" }) => {
+const Section: React.FC<SectionProps> = ({ id, children, bgColor = "bg-black", className = "", style }) => {
   return (
-    <section className={`py-16 md:py-24 px-6 md:px-12 relative ${bgColor} ${className}`}>
+    <section className={`py-16 md:py-24 px-6 md:px-12 relative ${bgColor} ${className}`} style={style}>
       <div className="max-w-7xl mx-auto">
         {children}
       </div>

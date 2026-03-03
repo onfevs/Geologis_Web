@@ -20,10 +20,10 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
             <span className="text-zinc-500 text-[10px] uppercase tracking-[0.6em] mb-4 block font-black">
                 {subtitle}
             </span>
-            <h2 className="text-4xl md:text-5xl font-title text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-title text-zinc-900 dark:text-white mb-6 transition-colors duration-500">
                 {titleLight} <span className="text-[#D4AF37]">{titleGold}</span>.
             </h2>
-            <p className="text-zinc-400 font-light leading-relaxed text-lg">
+            <p className="text-zinc-600 dark:text-zinc-400 font-light leading-relaxed text-lg transition-colors duration-500">
                 {description}
             </p>
         </div>

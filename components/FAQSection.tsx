@@ -9,62 +9,64 @@ const FAQSection: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-24">
-        <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.6em] mb-4 block font-black">Knowledge Base</span>
-        <h2 className="text-4xl md:text-5xl font-title text-white mb-6 italic">Preguntas Frecuentes</h2>
-        <p className="text-zinc-500 font-light max-w-xl mx-auto">
+        <span className="text-[#A67C00] dark:text-[#D4AF37] text-[10px] uppercase tracking-[0.6em] mb-4 block font-black transition-colors">Knowledge Base</span>
+        <h2 className="text-4xl md:text-5xl font-title text-zinc-900 dark:text-white mb-6 italic transition-colors">Preguntas Frecuentes</h2>
+        <p className="text-zinc-600 dark:text-zinc-500 font-light max-w-xl mx-auto transition-colors">
           Resolvemos sus dudas técnicas sobre normatividad SIG, flujos de automatización y procesos de consultoría.
         </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1 border-t border-zinc-200 dark:border-zinc-900">
         {FAQS.map((faq, i) => (
-          <div 
-            key={i} 
-            className={`transition-all duration-500 border-b border-zinc-900 overflow-hidden ${
-              openIndex === i ? 'bg-zinc-950/30' : 'hover:bg-zinc-950/10'
-            }`}
+          <div
+            key={i}
+            className={`transition-all duration-300 border-b border-zinc-200 dark:border-zinc-900 overflow-hidden ${openIndex === i ? 'bg-zinc-100/80 dark:bg-zinc-950/50' : 'hover:bg-zinc-100/40 dark:hover:bg-zinc-950/20'
+              }`}
           >
-            <button 
+            <button
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              className="w-full py-8 px-6 flex justify-between items-center text-left transition-colors group"
+              className="w-full py-7 px-6 flex justify-between items-center text-left transition-colors group cursor-pointer focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              aria-expanded={openIndex === i}
             >
               <div className="flex items-center space-x-6">
-                <span className={`text-[10px] font-black transition-colors duration-500 ${
-                  openIndex === i ? 'text-[#D4AF37]' : 'text-zinc-700'
-                }`}>
+                <span className={`font-mono text-[10px] font-black transition-colors duration-300 ${openIndex === i ? 'text-[#A67C00] dark:text-[#D4AF37]' : 'text-zinc-400 dark:text-zinc-700'
+                  }`}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className={`text-lg md:text-xl font-title transition-all duration-500 ${
-                  openIndex === i ? 'text-white translate-x-2' : 'text-zinc-400 group-hover:text-zinc-200'
-                }`}>
+                <span className={`text-lg md:text-xl font-title transition-all duration-300 ${openIndex === i ? 'text-zinc-900 dark:text-white translate-x-2' : 'text-zinc-700 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
+                  }`}>
                   {faq.question}
                 </span>
               </div>
-              <div className="relative w-6 h-6 flex items-center justify-center">
-                <span className={`absolute w-full h-0.5 bg-[#D4AF37] transition-transform duration-500 ${openIndex === i ? 'rotate-180' : ''}`}></span>
-                <span className={`absolute w-0.5 h-full bg-[#D4AF37] transition-transform duration-500 ${openIndex === i ? 'rotate-90 scale-0' : ''}`}></span>
+              <div className="relative w-5 h-5 shrink-0 flex items-center justify-center ml-4">
+                <span className={`absolute w-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 ${openIndex === i ? 'rotate-180' : ''}`}></span>
+                <span className={`absolute w-0.5 h-4 bg-[#D4AF37] transition-all duration-300 ${openIndex === i ? 'opacity-0 scale-0' : ''}`}></span>
               </div>
             </button>
-            <div 
-              className={`transition-all duration-700 ease-in-out px-16 ${
-                openIndex === i ? 'max-h-[500px] pb-10 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'
-              }`}
+            {/* CSS grid trick for smooth height animation */}
+            <div
+              className="grid transition-all duration-500 ease-in-out"
+              style={{ gridTemplateRows: openIndex === i ? '1fr' : '0fr' }}
             >
-              <div className="border-l border-[#D4AF37]/30 pl-8">
-                <p className="text-zinc-400 leading-relaxed font-light text-base md:text-lg">
-                  {faq.answer}
-                </p>
+              <div className="overflow-hidden">
+                <div className="px-16 pb-10">
+                  <div className="border-l border-[#D4AF37]/30 pl-8">
+                    <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base md:text-lg transition-colors">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
-      
-      <div className="mt-20 p-10 bg-zinc-950 border border-zinc-900 rounded-sm text-center">
-        <p className="text-zinc-500 text-sm mb-8">¿Tiene una consulta técnica específica que no aparece aquí?</p>
-        <a 
-          href="#contacto" 
-          className="group relative inline-block px-12 py-5 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-black uppercase tracking-[0.4em] rounded-full overflow-hidden hover:text-white transition-all"
+
+      <div className="mt-16 p-10 section-secondary dark:bg-zinc-950 border border-[#C8BFA8] dark:border-zinc-900 rounded-[2rem] text-center transition-colors">
+        <p className="text-zinc-700 dark:text-zinc-500 text-sm mb-8 transition-colors">¿Tiene una consulta técnica específica que no aparece aquí?</p>
+        <a
+          href="#contacto"
+          className="group relative inline-block px-12 py-5 border border-[#D4AF37]/40 text-[#A67C00] dark:text-[#D4AF37] text-[10px] font-black uppercase tracking-[0.4em] overflow-hidden hover:text-zinc-900 dark:hover:text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-full"
         >
           <PixelCanvas colors={GOLD_COLORS} gap={4} speed={50} />
           <span className="relative z-10">Consultar con un Ingeniero →</span>

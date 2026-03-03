@@ -9,6 +9,7 @@ export interface Review {
   author: string;
   role: string;
   company: string;
+  project?: string;
   content: string;
   rating: number;
 }

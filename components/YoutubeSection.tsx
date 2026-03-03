@@ -52,6 +52,8 @@ const YtThumbnail: React.FC<{ videoId: string; alt: string; className?: string }
       src={sources[srcIdx]}
       alt={alt}
       className={className}
+      loading="lazy"
+      decoding="async"
       referrerPolicy="no-referrer"
       crossOrigin="anonymous"
       onError={() => {
@@ -67,7 +69,7 @@ const VideoCard: React.FC<{ video: VideoData; index: number }> = ({ video, index
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="group relative bg-[#050505] border border-zinc-900 hover:border-[#D4AF37]/30 transition-all duration-500 rounded-[2rem] overflow-hidden flex flex-col">
+    <div className="group relative bg-white dark:bg-[#050505] border border-zinc-200 dark:border-zinc-900 hover:border-[#D4AF37]/40 dark:hover:border-[#D4AF37]/30 transition-all duration-500 rounded-[2rem] overflow-hidden flex flex-col shadow-lg dark:shadow-none">
       {/* Latest badge */}
       {index === 0 && (
         <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 bg-[#D4AF37] text-black text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
@@ -116,10 +118,10 @@ const VideoCard: React.FC<{ video: VideoData; index: number }> = ({ video, index
       {/* Text */}
       <div className="p-7 flex-grow flex flex-col justify-between">
         <div>
-          <h3 className="text-[#D4AF37] md:text-white text-base font-title mb-3 md:group-hover:text-[#D4AF37] transition-colors leading-snug">
+          <h3 className="text-[#D4AF37] md:text-zinc-900 md:dark:text-white text-base font-title mb-3 md:group-hover:text-[#D4AF37] md:dark:group-hover:text-[#D4AF37] transition-colors leading-snug">
             {video.title}
           </h3>
-          <p className="text-zinc-500 text-sm leading-relaxed mb-5 font-light line-clamp-2">
+          <p className="text-zinc-600 dark:text-zinc-500 text-sm leading-relaxed mb-5 font-light line-clamp-2 transition-colors">
             {video.description}
           </p>
         </div>
@@ -127,13 +129,13 @@ const VideoCard: React.FC<{ video: VideoData; index: number }> = ({ video, index
           href={`https://www.youtube.com/watch?v=${video.id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[9px] text-zinc-400 uppercase tracking-widest hover:text-[#D4AF37] transition-colors flex items-center gap-3 mt-auto group/link"
+          className="text-[9px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest hover:text-[#D4AF37] dark:hover:text-[#D4AF37] transition-colors flex items-center gap-3 mt-auto group/link"
         >
           <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
           </svg>
           Ver en YouTube
-          <span className="w-4 h-px bg-zinc-700 group-hover/link:w-8 group-hover/link:bg-[#D4AF37] transition-all duration-300" />
+          <span className="w-4 h-px bg-zinc-300 dark:bg-zinc-700 group-hover/link:w-8 group-hover/link:bg-[#D4AF37] transition-all duration-300" />
         </a>
       </div>
     </div>
@@ -187,14 +189,18 @@ async function fetchLatestVideos(): Promise<VideoData[]> {
 const YoutubeSection: React.FC = () => {
   const [videos, setVideos] = useState<VideoData[]>(SEED_VIDEOS);
   const [loading, setLoading] = useState(true);
+  const [rssLive, setRssLive] = useState(true);
 
   useEffect(() => {
     fetchLatestVideos().then(fetched => {
       if (fetched.length >= 1) {
-        // Merge: latest fetched videos first, fill remainder with seeds not already included
         const fetchedIds = new Set(fetched.map(v => v.id));
         const extras = SEED_VIDEOS.filter(v => !fetchedIds.has(v.id));
         setVideos([...fetched, ...extras].slice(0, 3));
+        setRssLive(true);
+      } else {
+        // RSS failed or returned empty — show seeds with fallback indicator
+        setRssLive(false);
       }
       setLoading(false);
     });
@@ -220,16 +226,34 @@ const YoutubeSection: React.FC = () => {
         </PremiumButton>
       </div>
 
+      {/* RSS status indicator */}
+      {!loading && (
+        <div className={`mb-8 flex items-center gap-2 ${rssLive ? 'text-emerald-500' : 'text-amber-500'}`}>
+          <span className="relative flex h-2 w-2">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${rssLive ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${rssLive ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+          </span>
+          <span className="text-[9px] uppercase tracking-[0.3em] font-black">
+            {rssLive ? 'Videos actualizados en tiempo real' : 'Mostrando videos de muestra · '}
+            {!rssLive && (
+              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white transition-colors">
+                Ver canal en YouTube
+              </a>
+            )}
+          </span>
+        </div>
+      )}
+
       {loading ? (
         /* Skeleton loaders */
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[0, 1, 2].map(i => (
-            <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-[2rem] overflow-hidden animate-pulse">
-              <div className="aspect-video bg-zinc-800" />
+            <div key={i} className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] overflow-hidden animate-pulse">
+              <div className="aspect-video bg-zinc-200 dark:bg-zinc-800" />
               <div className="p-7 space-y-3">
-                <div className="h-4 bg-zinc-800 rounded w-3/4" />
-                <div className="h-3 bg-zinc-800 rounded w-full" />
-                <div className="h-3 bg-zinc-800 rounded w-2/3" />
+                <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4" />
+                <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-full" />
+                <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-2/3" />
               </div>
             </div>
           ))}
@@ -243,7 +267,7 @@ const YoutubeSection: React.FC = () => {
       )}
 
       {/* Notice */}
-      <p className="text-center text-zinc-700 text-[10px] uppercase tracking-widest mt-8">
+      <p className="text-center text-zinc-500 dark:text-zinc-700 text-[10px] uppercase tracking-widest mt-8 transition-colors">
         Los videos se actualizan automáticamente · Canal @OnfeVS GeolóGIS
       </p>
     </div>

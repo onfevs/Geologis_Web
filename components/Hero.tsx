@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
   const blendFactor = 0.5 + (progress * 0.5);
 
   return (
-    <section ref={heroRef} className="relative h-[110vh] w-full overflow-hidden bg-black">
+    <section ref={heroRef} className="relative h-[110vh] w-full overflow-hidden bg-zinc-50 dark:bg-black transition-colors duration-700">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Cinematic Background Layer */}
         <div
@@ -68,13 +68,11 @@ const Hero: React.FC = () => {
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             opacity: Math.max(0, 1 - progress * 2.5),
-            filter: 'grayscale(100%) brightness(0.4)'
           }}
         />
-
         {/* Cinematic Overlays */}
-        <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/70 via-transparent to-black"></div>
-        <div className="absolute inset-0 z-[2] bg-black/10 backdrop-grayscale-[0.2]"></div>
+        <div className="absolute inset-0 z-[2] bg-gradient-to-b from-white/95 via-white/80 to-zinc-50/90 dark:from-black/70 dark:via-transparent dark:to-black transition-colors duration-700 backdrop-blur-sm dark:backdrop-blur-none pointer-events-none" />
+        <div className="absolute inset-0 z-[2] bg-white/30 dark:bg-black/10 backdrop-grayscale-0 dark:backdrop-grayscale-[0.2] transition-colors duration-700 pointer-events-none"></div>
 
         <div
           className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none"
@@ -84,28 +82,28 @@ const Hero: React.FC = () => {
           }}
         >
           <div className="text-center max-w-5xl px-4 md:px-6 pointer-events-auto">
-            <h1 className="text-white text-5xl md:text-[9rem] font-title tracking-tighter mb-4 md:mb-8 leading-none drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] mt-10 md:mt-0">
-              OnfeVS <span className="text-[#D4AF37] italic">Geologis</span>
+            <h1 className="text-zinc-900 dark:text-white text-[2.8rem] md:text-[9rem] font-title tracking-tighter mb-3 md:mb-8 leading-none drop-shadow-xl dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] mt-6 md:mt-0 transition-colors duration-700">
+              OnfeVS <span className="text-[#A67C00] dark:text-[#D4AF37] italic transition-colors">Geologis</span>
             </h1>
 
-            <div className="h-[80px] md:h-[100px] flex flex-col items-center justify-center mb-10 md:mb-16">
-              <p className="text-zinc-200 text-base md:text-2xl max-w-3xl mx-auto font-subtitle font-light leading-relaxed tracking-wide drop-shadow-lg mb-2">
+            <div className="h-[70px] md:h-[100px] flex flex-col items-center justify-center mb-8 md:mb-16">
+              <p className="text-zinc-600 dark:text-zinc-200 text-sm md:text-2xl max-w-3xl mx-auto font-subtitle font-light leading-relaxed tracking-wide drop-shadow-sm dark:drop-shadow-lg mb-1 transition-colors duration-700">
                 Soluciones críticas y automatización en
               </p>
               <span
-                className={`text-3xl md:text-6xl font-black transition-all duration-500 tracking-[0.1em] md:tracking-[0.2em] ${fade ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform -translate-y-4 scale-95'
-                  } text-[#D4AF37] drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]`}
+                className={`text-2xl md:text-6xl font-black transition-all duration-500 tracking-[0.08em] md:tracking-[0.2em] ${fade ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform -translate-y-4 scale-95'
+                  } text-[#A67C00] dark:text-[#D4AF37] drop-shadow-sm dark:drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]`}
               >
                 {HERO_KEYWORDS[keywordIndex]}
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8">
-              <a href="#contacto" className="w-full sm:w-auto text-center group relative px-10 py-5 sm:px-16 sm:py-7 bg-[#D4AF37] text-black text-[10px] sm:text-[12px] font-black uppercase tracking-[0.4em] rounded-full overflow-hidden hover:scale-105 transition-all shadow-[0_0_60px_rgba(212,175,55,0.4)]">
-                <PixelCanvas colors={["#000000", "#1a1a1a"]} gap={6} speed={40} />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-0 sm:space-x-8">
+              <a href="#contacto" className="w-full sm:w-auto text-center group relative px-8 py-4 sm:px-16 sm:py-7 bg-zinc-900 dark:bg-[#D4AF37] text-white dark:text-black text-[10px] sm:text-[12px] font-black uppercase tracking-[0.4em] rounded-full overflow-hidden hover:scale-105 transition-all shadow-xl dark:shadow-[0_0_60px_rgba(212,175,55,0.4)]">
+                <PixelCanvas colors={["#18181b", "#27272a"]} gap={6} speed={40} />
                 <span className="relative z-10">Agendar Consultoría</span>
               </a>
-              <a href="#proyectos" className="w-full sm:w-auto text-center group relative px-10 py-5 sm:px-16 sm:py-7 border-2 border-[#D4AF37]/50 text-[#D4AF37] text-[10px] sm:text-[12px] font-black uppercase tracking-[0.4em] rounded-full overflow-hidden hover:text-white hover:border-[#D4AF37] transition-all bg-black/50 backdrop-blur-md">
+              <a href="#proyectos" className="w-full sm:w-auto text-center group relative px-8 py-4 sm:px-16 sm:py-7 border-2 border-zinc-300 dark:border-[#D4AF37]/50 text-zinc-900 dark:text-[#D4AF37] text-[10px] sm:text-[12px] font-black uppercase tracking-[0.4em] rounded-full overflow-hidden hover:text-zinc-900 dark:hover:text-white hover:border-zinc-500 dark:hover:border-[#D4AF37] transition-all bg-white/80 dark:bg-black/50 backdrop-blur-md shadow-lg dark:shadow-none">
                 <PixelCanvas colors={GOLD_COLORS} gap={6} speed={40} />
                 <span className="relative z-10">Casos de Éxito</span>
               </a>

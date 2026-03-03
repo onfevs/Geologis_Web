@@ -105,6 +105,7 @@ export const REVIEWS: Review[] = [
     author: "Ing. Ricardo Santos",
     role: "Director Proyectos",
     company: "Minera Central",
+    project: "GDB ANM · Antioquia",
     content: "La automatización con Python de OnfeVS revolucionó nuestra forma de procesar datos de campo.",
     rating: 5
   },
@@ -113,6 +114,7 @@ export const REVIEWS: Review[] = [
     author: "Dra. Martha Luz",
     role: "Consultora Senior",
     company: "EcoGeo",
+    project: "ICA ANLA · Santander",
     content: "Los mejores entregables GDB que hemos recibido. Cumplimiento total de normatividad ANLA.",
     rating: 5
   },
@@ -121,6 +123,7 @@ export const REVIEWS: Review[] = [
     author: "Ing. Carlos Mesa",
     role: "Gerente SIG",
     company: "GeoInnova",
+    project: "Catastro LADM-COL · Quindío",
     content: "Ahorro masivo de tiempo y eliminación de errores críticos en nuestras geodatabases.",
     rating: 5
   },
@@ -129,6 +132,7 @@ export const REVIEWS: Review[] = [
     author: "Dra. Elena Ruiz",
     role: "Especialista",
     company: "GreenLeaf",
+    project: "Susceptibilidad · Boyacá",
     content: "Mapas de susceptibilidad que superaron las expectativas técnicas de la autoridad minera.",
     rating: 5
   }

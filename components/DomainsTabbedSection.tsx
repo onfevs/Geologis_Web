@@ -53,6 +53,7 @@ const NORM_CATASTRO: NormRef[] = [
 
 const CATASTRO_MUNICIPIOS: CatastroMuni[] = [
     { name: 'El Retiro', dept: 'Antioquia', rural: 9031, urban: 3767, role: 'Consolidador SIG', status: 'finalizado', image: '/images/catastro/ElRetiro.jpg', lat: 6.0594, lng: -75.5028 },
+    { name: 'Puerto Berrío', dept: 'Antioquia', rural: 7000, urban: 4000, role: 'Independiente', status: 'finalizado', image: '/images/catastro/ElRetiro.jpg', lat: 6.4894, lng: -74.4063 },
     { name: 'Filandia', dept: 'Quindío', rural: 2480, urban: 2539, status: 'finalizado', image: '/images/catastro/Filandia.jpg', lat: 4.6738, lng: -75.6669 },
     { name: 'Quimbaya', dept: 'Quindío', rural: 6643, urban: 2265, status: 'finalizado', image: '/images/catastro/Quimbaya.jpg', lat: 4.6214, lng: -75.7600 },
     { name: 'Montenegro', dept: 'Quindío', rural: 9516, urban: 2208, status: 'finalizado', image: '/images/catastro/Montenegro.jpg', lat: 4.5678, lng: -75.7500 },
@@ -119,17 +120,17 @@ const AnimNum: React.FC<{ end: number; go: boolean; dur?: number }> = ({ end, go
 // ─── Normative Banner ─────────────────────────────────────────────────────────
 
 const NormBanner: React.FC<{ norms: NormRef[] }> = ({ norms }) => (
-    <div className="mt-8 pt-6 border-t border-zinc-800">
-        <p className="text-zinc-600 text-[9px] uppercase tracking-[0.4em] font-black mb-3">Marco Normativo</p>
+    <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+        <p className="font-mono text-zinc-600 dark:text-zinc-500 text-[9px] uppercase tracking-[0.4em] font-black mb-3">Marco Normativo</p>
         <div className="flex flex-col gap-2">
             {norms.map((n, i) => (
-                <div key={i} className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center p-4 rounded-lg border border-zinc-900 bg-zinc-950/40 opacity-80 hover:opacity-100 transition-opacity">
-                    <span className="shrink-0 text-[10px] font-black uppercase px-2 py-0.5 border rounded" style={{ color: n.color, borderColor: `${n.color}50` }}>
+                <div key={i} className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center p-4 border border-zinc-200 dark:border-zinc-900 bg-zinc-50 dark:bg-zinc-950/40 opacity-80 hover:opacity-100 transition-opacity">
+                    <span className="shrink-0 font-mono text-[10px] font-black uppercase px-2 py-0.5 border" style={{ color: n.color, borderColor: `${n.color}50` }}>
                         {n.code}
                     </span>
                     <div className="flex-1 min-w-0">
-                        <p className="text-zinc-300 text-[11px] leading-snug">{n.title}</p>
-                        <p className="text-zinc-600 text-[9px] mt-0.5 uppercase tracking-wider">{n.entity} · {n.year}</p>
+                        <p className="text-zinc-800 dark:text-zinc-300 text-[11px] leading-snug font-medium transition-colors">{n.title}</p>
+                        <p className="text-zinc-600 dark:text-zinc-600 text-[9px] mt-0.5 uppercase tracking-wider">{n.entity} · {n.year}</p>
                     </div>
                 </div>
             ))}
@@ -146,15 +147,15 @@ const MineriaStats: React.FC<{ go: boolean }> = ({ go }) => (
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
             {MINERIA_KPIS.map((k, i) => (
-                <div key={i} className="bg-zinc-900/60 border border-zinc-800 hover:border-[#D4AF37]/30 rounded-xl p-4 transition-all duration-300 group">
-                    <p className={`text-2xl md:text-3xl font-title mb-1 ${i < 2 ? 'text-[#D4AF37]' : 'text-white'}`}>{k.value}</p>
+                <div key={i} className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 hover:border-[#D4AF37]/30 dark:hover:border-[#D4AF37]/30 rounded-xl p-4 transition-all duration-300 group">
+                    <p className={`text-2xl md:text-3xl font-title mb-1 transition-colors ${i < 2 ? 'text-[#D4AF37]' : 'text-zinc-900 dark:text-white'}`}>{k.value}</p>
                     <p className="text-[#D4AF37] text-[9px] uppercase tracking-widest font-black">{k.label}</p>
-                    <p className="text-zinc-600 text-[9px] mt-1 leading-relaxed">{k.detail}</p>
+                    <p className="text-zinc-500 dark:text-zinc-600 text-[9px] mt-1 leading-relaxed">{k.detail}</p>
                 </div>
             ))}
         </div>
-        <div className="bg-zinc-900/40 border border-zinc-800 rounded-xl p-5">
-            <p className="text-zinc-400 text-[11px] mb-4 uppercase tracking-widest font-black">Distribución de Entregables</p>
+        <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 transition-colors">
+            <p className="text-zinc-500 dark:text-zinc-400 text-[11px] mb-4 uppercase tracking-widest font-black">Distribución de Entregables</p>
             {[
                 { label: 'FBM — Formatos Básicos Mineros', pct: 55, count: '50+' },
                 { label: 'GDB — Geodatabases ANM', pct: 70, count: '65+' },
@@ -162,10 +163,10 @@ const MineriaStats: React.FC<{ go: boolean }> = ({ go }) => (
             ].map((row, i) => (
                 <div key={i} className="mb-4 last:mb-0">
                     <div className="flex justify-between mb-1.5">
-                        <p className="text-zinc-300 text-[11px]">{row.label}</p>
+                        <p className="text-zinc-700 dark:text-zinc-300 text-[11px] font-medium transition-colors">{row.label}</p>
                         <p className="text-[#D4AF37] text-[11px] font-bold">{row.count}</p>
                     </div>
-                    <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden transition-colors">
                         <div className="h-full rounded-full bg-gradient-to-r from-[#996515] to-[#F5D142] transition-all duration-1000 ease-out"
                             style={{ width: go ? `${row.pct}%` : '0%', transitionDelay: `${i * 150}ms` }} />
                     </div>
@@ -189,24 +190,24 @@ const AnlaStats: React.FC<{ go: boolean }> = ({ go }) => (
                 { n: 95, suf: '%', lbl: 'Aprobación Técnica', sub: 'Sin observaciones de fondo', gold: false },
                 { n: 10, suf: '', lbl: 'Departamentos', sub: 'Cobertura nacional', gold: false },
             ].map((k, i) => (
-                <div key={i} className="bg-zinc-900 rounded-xl p-3 text-center border border-zinc-800">
-                    <p className={`text-xl md:text-2xl font-title ${k.gold ? 'text-[#D4AF37]' : 'text-white'}`}>
+                <div key={i} className="bg-white dark:bg-zinc-900 rounded-xl p-3 text-center border border-zinc-200 dark:border-zinc-800 transition-colors">
+                    <p className={`text-xl md:text-2xl font-title transition-colors ${k.gold ? 'text-[#D4AF37]' : 'text-zinc-900 dark:text-white'}`}>
                         <AnimNum end={k.n} go={go} />{k.suf}
                     </p>
                     <p className="text-[#D4AF37] text-[9px] uppercase tracking-widest font-black mt-1">{k.lbl}</p>
-                    <p className="text-zinc-600 text-[9px] mt-0.5">{k.sub}</p>
+                    <p className="text-zinc-500 dark:text-zinc-600 text-[9px] mt-0.5">{k.sub}</p>
                 </div>
             ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {ICA_PROJECTS.map((p, i) => (
-                <div key={i} className="flex items-start gap-2.5 bg-zinc-900/50 border border-zinc-800 hover:border-[#D4AF37]/25 rounded-xl p-3 transition-all duration-300">
-                    <span className="shrink-0 w-5 h-5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] text-[8px] font-black mt-0.5">
+                <div key={i} className="flex items-start gap-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-[#D4AF37]/40 dark:hover:border-[#D4AF37]/25 p-3 transition-all duration-300">
+                    <span className="shrink-0 w-5 h-5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center font-mono text-[#A67C00] dark:text-[#D4AF37] text-[8px] font-black mt-0.5">
                         {String(i + 1).padStart(2, '0')}
                     </span>
                     <div>
-                        <p className="text-white text-[12px] font-semibold">{p.name}</p>
-                        <p className="text-zinc-500 text-[10px] mt-0.5">{p.scope}</p>
+                        <p className="text-zinc-900 dark:text-white text-[12px] font-semibold transition-colors">{p.name}</p>
+                        <p className="text-zinc-600 dark:text-zinc-500 text-[10px] mt-0.5 transition-colors">{p.scope}</p>
                     </div>
                 </div>
             ))}
@@ -270,16 +271,16 @@ const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
             {/* ── KPI strip ── */}
             <div className="grid grid-cols-3 gap-3">
                 {[
-                    { n: CATASTRO_MUNICIPIOS.length, lbl: 'Municipios', sub: '5 entregados · 2 en proceso', gold: false },
+                    { n: CATASTRO_MUNICIPIOS.length, lbl: 'Municipios', sub: `${finalizados.length} entregados · ${enProceso.length} en proceso`, gold: false },
                     { n: totalPredios, lbl: 'Predios Totales', sub: 'Rurales + Urbanos digitalizados', gold: false },
                     { n: myShare, lbl: 'Mi Aporte (⅙)', sub: 'Equipo de 6 especialistas', gold: true },
                 ].map((k, i) => (
-                    <div key={i} className="bg-zinc-900/80 rounded-xl p-3 text-center border border-zinc-800">
-                        <p className={`text-xl md:text-2xl font-title ${k.gold ? 'text-[#D4AF37]' : 'text-white'}`}>
+                    <div key={i} className="bg-[#F5F0E8] dark:bg-zinc-900/80 transition-colors rounded-xl p-3 text-center border border-[#C8BFA8] dark:border-zinc-800">
+                        <p className={`text-xl md:text-2xl font-title transition-colors ${k.gold ? 'text-[#D4AF37]' : 'text-zinc-900 dark:text-white'}`}>
                             <AnimNum end={k.n} go={go} />
                         </p>
                         <p className="text-[#D4AF37] text-[9px] uppercase tracking-widest font-black mt-1">{k.lbl}</p>
-                        <p className="text-zinc-600 text-[9px] mt-0.5">{k.sub}</p>
+                        <p className="text-zinc-600 dark:text-zinc-600 text-[9px] mt-0.5 transition-colors">{k.sub}</p>
                     </div>
                 ))}
             </div>
@@ -294,10 +295,14 @@ const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
                     <span className="flex-1 h-px bg-emerald-400/10" />
                     <span className="text-zinc-600 text-[10px]">{finalizados.length} municipios</span>
                 </div>
-                {/* 1 col mobile · 2 col tablet · 5 col desktop en una fila */}
+                {/* Adaptive grid: 3 cols when 6 items (3+3), 5 cols for 5, fallback 3 cols */}
                 <div
                     ref={gridRef}
-                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"
+                    className={`grid gap-4 grid-cols-1 sm:grid-cols-2 ${finalizados.length === 6 ? 'xl:grid-cols-3' :
+                            finalizados.length === 5 ? 'xl:grid-cols-5' :
+                                finalizados.length === 4 ? 'xl:grid-cols-4' :
+                                    'xl:grid-cols-3'
+                        }`}
                 >
                     {finalizados.map((m, i) => (
                         <PremiumMuniCard key={i} m={m} go={go} />
@@ -327,17 +332,40 @@ const CatastroStats: React.FC<{ go: boolean }> = ({ go }) => {
             </div>
 
             {/* ── PRÓXIMAMENTE ── */}
-            <div className="flex flex-wrap items-center gap-2 bg-zinc-900/30 border border-dashed border-zinc-800 rounded-xl px-4 py-3">
-                <div className="flex items-center gap-2 shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                    <span className="text-zinc-500 text-[9px] uppercase tracking-[0.3em] font-black">Próximamente</span>
+            <div>
+                <div className="flex items-center gap-2.5 mb-5">
+                    <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-600 shrink-0 transition-colors" />
+                    <p className="text-zinc-500 dark:text-zinc-500 text-[10px] uppercase tracking-[0.3em] font-black">
+                        Próximamente · En Gestión
+                    </p>
+                    <span className="flex-1 h-px bg-zinc-300 dark:bg-zinc-800 transition-colors" />
                 </div>
-                {['Santander', 'Valle del Cauca', 'Huila', 'Cundinamarca', 'Córdoba'].map(d => (
-                    <span key={d} className="text-[10px] text-zinc-500 bg-zinc-800/70 border border-zinc-700/60 px-2.5 py-0.5 rounded-full">
-                        {d}
-                    </span>
-                ))}
-                <span className="text-zinc-700 text-[10px] italic">+ más en gestión</span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {[
+                        { name: 'Santander', dept: 'Santander del Norte' },
+                        { name: 'Valle del Cauca', dept: 'Valle del Cauca' },
+                        { name: 'Huila', dept: 'Departamento del Huila' },
+                        { name: 'Cundinamarca', dept: 'Cundinamarca' },
+                        { name: 'Córdoba', dept: 'Córdoba' },
+                    ].map((place, idx) => (
+                        <div
+                            key={idx}
+                            className="relative h-[200px] rounded-[1.5rem] overflow-hidden border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950/60 flex flex-col items-center justify-center gap-3 transition-colors"
+                        >
+                            {/* pulsing dot */}
+                            <div className="w-8 h-8 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center transition-colors">
+                                <span className="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-600 animate-pulse transition-colors" />
+                            </div>
+                            <div className="text-center px-3">
+                                <p className="text-zinc-800 dark:text-zinc-200 font-bold text-sm leading-snug transition-colors">{place.name}</p>
+                                <p className="text-zinc-500 dark:text-zinc-600 text-[9px] uppercase tracking-widest mt-1 transition-colors">{place.dept}</p>
+                            </div>
+                            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-700 border border-zinc-300 dark:border-zinc-700 px-2 py-0.5 rounded-full transition-colors">
+                                Próximamente
+                            </span>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <NormBanner norms={NORM_CATASTRO} />
@@ -421,18 +449,18 @@ const DomainsTabbedSection: React.FC = () => {
                         onClick={() => setActiveTab(tab.id)}
                         className={`group flex flex-col items-center px-8 py-4 rounded-full transition-all duration-500 border ${activeTab === tab.id
                             ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-[0_0_30px_rgba(212,175,55,0.3)]'
-                            : 'bg-zinc-950 text-zinc-500 border-zinc-900 hover:border-[#D4AF37]/50 hover:text-white'
+                            : 'bg-white dark:bg-zinc-950 text-zinc-500 border-zinc-200 dark:border-zinc-900 hover:border-[#D4AF37]/50 hover:text-zinc-900 dark:hover:text-white'
                             }`}
                     >
                         <span className="text-[11px] font-black uppercase tracking-[0.3em]">{tab.label}</span>
-                        <span className={`text-[8px] tracking-wider mt-0.5 ${activeTab === tab.id ? 'text-black/60' : 'text-zinc-700'}`}>
+                        <span className={`text-[8px] tracking-wider mt-0.5 ${activeTab === tab.id ? 'text-black/60' : 'text-zinc-500 dark:text-zinc-700'}`}>
                             {tab.normLabel}
                         </span>
                     </button>
                 ))}
             </div>
 
-            {/* Mobile selector */}
+            {/* Mobile selector — vertical stacked */}
             <div className="md:hidden flex flex-col space-y-2 mb-10 px-4">
                 {TABS.map((tab) => (
                     <button
@@ -440,24 +468,25 @@ const DomainsTabbedSection: React.FC = () => {
                         type="button"
                         role="tab"
                         aria-selected={activeTab === tab.id}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setActiveTab(tab.id);
-                        }}
-                        className={`w-full block text-left px-6 py-4 rounded-lg transition-all duration-300 border cursor-pointer select-none outline-none ${activeTab === tab.id
+                        aria-label={`${tab.label} — ${tab.normLabel}`}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full flex items-center justify-between px-6 py-5 rounded-2xl transition-all duration-300 border cursor-pointer select-none outline-none ${activeTab === tab.id
                             ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/50'
-                            : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-500 border-zinc-800'
+                            : 'bg-white dark:bg-zinc-900/80 text-zinc-500 border-zinc-200 dark:border-zinc-800'
                             }`}
                         style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
-                        <span className="block text-[10px] font-black uppercase tracking-widest">{tab.label}</span>
-                        <span className="block text-[9px] text-zinc-600 mt-0.5">{tab.normLabel}</span>
+                        <div className="text-left">
+                            <span className="block text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
+                            <span className="block text-[9px] text-zinc-600 mt-0.5">{tab.normLabel}</span>
+                        </div>
+                        <span className={`w-2 h-2 rounded-full shrink-0 transition-all duration-300 ${activeTab === tab.id ? 'bg-[#D4AF37]' : 'bg-zinc-700'}`} />
                     </button>
                 ))}
             </div>
 
             {/* Content Panel */}
-            <div className="bg-zinc-950/50 rounded-[2rem] border border-zinc-900 p-6 md:p-12">
+            <div className="bg-white dark:bg-zinc-950/50 rounded-[2rem] border border-zinc-200 dark:border-zinc-900 p-6 md:p-12 transition-colors duration-700 shadow-xl dark:shadow-none">
                 {/* Top: text + image */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                     <div className="order-2 lg:order-1 animate-fade-in-up" key={`text-${activeTab}`}>
@@ -469,17 +498,17 @@ const DomainsTabbedSection: React.FC = () => {
                             {activeData.normLabel}
                         </span>
 
-                        <h3 className="text-3xl md:text-4xl font-title text-white mb-5">
+                        <h3 className="text-3xl md:text-4xl font-title text-zinc-900 dark:text-white mb-5 transition-colors duration-500">
                             {activeData.label} <span className="text-[#D4AF37]">·</span> Expertise
                         </h3>
-                        <p className="text-zinc-400 text-base font-light leading-relaxed mb-8">
+                        <p className="text-zinc-600 dark:text-zinc-400 text-base font-light leading-relaxed mb-8 transition-colors duration-500">
                             {activeData.description}
                         </p>
                         <div className="space-y-3 mb-10">
                             {activeData.features.map((feature, idx) => (
-                                <div key={idx} className="flex items-start space-x-4 group p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 hover:border-[#D4AF37]/30 transition-colors">
+                                <div key={idx} className="flex items-start space-x-4 group p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-[#D4AF37]/40 dark:hover:border-[#D4AF37]/30 transition-colors">
                                     <div className="h-2 w-2 bg-[#D4AF37] mt-2 rounded-full shrink-0 shadow-[0_0_10px_#D4AF37]" />
-                                    <p className="text-zinc-300 text-sm">{feature}</p>
+                                    <p className="text-zinc-700 dark:text-zinc-300 text-sm font-medium dark:font-normal">{feature}</p>
                                 </div>
                             ))}
                         </div>
@@ -491,7 +520,9 @@ const DomainsTabbedSection: React.FC = () => {
 
                     <div className="order-1 lg:order-2 aspect-square md:aspect-[4/3] w-full rounded-[1.5rem] overflow-hidden relative shadow-2xl border border-zinc-800" key={`img-${activeTab}`}>
                         <div className="absolute inset-0 bg-transparent md:bg-black/20 md:hover:bg-transparent transition-all duration-700 z-10 pointer-events-none" />
-                        <img src={activeData.image} alt={activeData.label}
+                        <img src={activeData.image} alt={`${activeData.label} — OnfeVS Geologis`}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover grayscale-0 md:grayscale md:hover:grayscale-0 md:hover:scale-105 transition-all duration-1000 animate-fade-in" />
                     </div>
                 </div>

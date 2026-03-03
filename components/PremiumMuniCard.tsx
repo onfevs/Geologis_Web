@@ -27,9 +27,11 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
     const isProc = m.status === 'en_proceso';
     const [isFlipped, setIsFlipped] = useState(false);
 
-    // Referencia para detectar si el usuario está haciendo scroll o tap en móvil
+    // refs for touch gesture detection
     const touchStartY = React.useRef(0);
     const touchStartX = React.useRef(0);
+    // flag: suppress the synthetic click that mobile fires after touchEnd
+    const justTouched = React.useRef(false);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         touchStartY.current = e.touches[0].clientY;
@@ -39,13 +41,15 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
     const handleTouchEnd = (e: React.TouchEvent) => {
         const deltaY = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
         const deltaX = Math.abs(e.changedTouches[0].clientX - touchStartX.current);
-        // Solo es un "tap" si el dedo se movió menos de 10px en cualquier dirección
+        // Only treat as a tap if finger barely moved
         if (deltaY < 10 && deltaX < 10) {
-            e.preventDefault();   // Evita que el navegador haga scroll/navigate
+            e.preventDefault();   // block default scroll / navigate
             e.stopPropagation();
             setIsFlipped(prev => !prev);
+            // Suppress the synthetic click that browsers fire ~300ms after touchEnd
+            justTouched.current = true;
+            setTimeout(() => { justTouched.current = false; }, 400);
         }
-        // Si el dedo se movió más, era un scroll → no hacemos nada
     };
 
     return (
@@ -55,10 +59,12 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
             onMouseLeave={() => setIsFlipped(false)}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            // onClick en desktop, onTouchEnd maneja mobile
             onClick={(e) => {
-                // En desktop, prevenir bubbling hacia secciones padre
+                // Block the synthetic click fired by mobile browsers after touch
+                e.preventDefault();
                 e.stopPropagation();
+                if (justTouched.current) return; // already handled by touchEnd
+                setIsFlipped(prev => !prev);
             }}
         >
             <div
@@ -67,26 +73,28 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
             >
 
                 {/* ══════ FRENTE (Glassmorphism Split / Ice Land Style) ══════ */}
-                <div className="flip-card-front w-full h-full rounded-[1.5rem] overflow-hidden relative border border-zinc-800/80 shadow-[0_15px_35px_rgba(0,0,0,0.5)] bg-black">
+                <div className="flip-card-front w-full h-full rounded-[1.5rem] overflow-hidden relative border border-zinc-200 dark:border-zinc-800/80 shadow-md dark:shadow-[0_15px_35px_rgba(0,0,0,0.5)] bg-zinc-100 dark:bg-black transition-colors duration-500">
                     {/* 1. IMAGEN DE FONDO (enfocada) - cubre el 100% */}
                     <img
                         src={m.image || '/images/catastro.jpg'}
-                        alt={m.name}
+                        alt={`${m.name}, ${m.dept} — Catastro Multipropósito`}
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out"
                         style={{ transform: isFlipped ? 'scale(1.1)' : 'scale(1)', zIndex: 1 }}
                     />
 
-                    {/* 2. PANEL FROSTED GLASS (estilo Iceland) - lado derecho 40%
-                        Técnica: imagen duplicada borrosa + overlay blanco encima = vidrio esmerilado */}
+                    {/* 2. PANEL FROSTED GLASS */}
                     <div
                         className="absolute top-0 right-0 h-full overflow-hidden"
                         style={{ width: '40%', zIndex: 2 }}
                     >
-                        {/* Imagen borrosa alineada a la derecha igual que el fondo principal */}
                         <img
                             src={m.image || '/images/catastro.jpg'}
                             alt=""
                             aria-hidden="true"
+                            loading="lazy"
+                            decoding="async"
                             style={{
                                 position: 'absolute',
                                 top: 0,
@@ -161,9 +169,9 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
 
                     {/* 6. BADGE "En proceso" */}
                     {isProc && (
-                        <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-amber-400/50 rounded-full px-3 py-1.5 shadow-lg" style={{ zIndex: 5 }}>
+                        <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-white/80 dark:bg-black/60 backdrop-blur-md border border-amber-400/50 rounded-full px-3 py-1.5 shadow-lg transition-colors" style={{ zIndex: 5 }}>
                             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_#FCD34D]" />
-                            <span className="text-amber-400 text-[9px] font-black uppercase tracking-widest">En proceso</span>
+                            <span className="text-amber-500 dark:text-amber-400 text-[9px] font-black uppercase tracking-widest">En proceso</span>
                         </div>
                     )}
 
@@ -180,15 +188,9 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
                 </div>
 
                 {/* ══════ REVERSO ══════ */}
-                <div className="flip-card-back w-full h-full rounded-[1.5rem] overflow-hidden" style={{
-                    background: '#09090b',
-                    border: '1px solid rgba(212,175,55,0.2)',
-                    boxShadow: '0 8px 32px rgba(212,175,55,0.1)',
-                    display: 'flex',
-                    flexDirection: 'column'
-                }}>
-                    {/* PREMIUM MAP BACKGROUND */}
-                    <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.35 }}>
+                <div className="flip-card-back w-full h-full rounded-[1.5rem] overflow-hidden flex flex-col bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-[#D4AF37]/20 shadow-xl dark:shadow-[0_8px_32px_rgba(212,175,55,0.1)] transition-colors duration-500">
+                    {/* PREMIUM MAP BACKGROUND — pointer-events none: purely decorative */}
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.35, pointerEvents: 'none', userSelect: 'none' }}>
                         <MapContainer
                             center={[m.lat, m.lng]}
                             zoom={13}
@@ -197,7 +199,10 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
                             dragging={false}
                             scrollWheelZoom={false}
                             doubleClickZoom={false}
-                            style={{ height: '100%', width: '100%', background: '#0a0a0a' }}
+                            touchZoom={false}
+                            boxZoom={false}
+                            keyboard={false}
+                            style={{ height: '100%', width: '100%', background: '#0a0a0a', pointerEvents: 'none' }}
                         >
                             <MapResizer isFlipped={isFlipped} />
                             <TileLayer
@@ -209,20 +214,16 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
                                 pathOptions={{ color: '#D4AF37', fillColor: '#D4AF37', fillOpacity: 0.7 }}
                             />
                         </MapContainer>
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(9,9,11,0.2) 0%, rgba(9,9,11,0.6) 40%, rgba(9,9,11,0.95) 85%)', zIndex: 1 }} />
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/60 to-white/95 dark:from-[#09090b]/20 dark:via-[#09090b]/60 dark:to-[#09090b]/95 z-[1] transition-colors" />
                     </div>
 
                     {/* Contenido Reverso */}
                     <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10 }}>
                         <div className="flex justify-between items-start">
                             <div>
-                                <div style={{
-                                    width: 28, height: 2,
-                                    background: 'linear-gradient(to right, #D4AF37, transparent)',
-                                    marginBottom: 6
-                                }} />
-                                <p style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem', margin: 0, lineHeight: 1.2 }}>{m.name}</p>
-                                <p style={{ color: '#71717a', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 2 }}>{m.dept}</p>
+                                <div style={{ width: 28, height: 2, background: 'linear-gradient(to right, #D4AF37, transparent)', marginBottom: 6 }} />
+                                <p className="text-zinc-900 dark:text-white font-[800] text-[0.95rem] m-0 leading-tight transition-colors">{m.name}</p>
+                                <p className="text-zinc-500 dark:text-[#71717a] text-[0.58rem] uppercase tracking-[0.2em] mt-[2px] transition-colors">{m.dept}</p>
                             </div>
                             <div className="flex flex-col gap-1 items-end pt-1">
                                 {m.role && (
@@ -250,12 +251,12 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
                     </div>
 
                     {/* Stats at bottom area */}
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', flex: 2, zIndex: 10 }}>
-                        <div style={{ marginBottom: 10, padding: '0 16px', position: 'relative' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                                <span style={{ color: '#71717a', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>Composición predial</span>
+                    <div className="flex flex-col justify-end flex-[2] z-10">
+                        <div className="mb-2.5 px-4 relative">
+                            <div className="flex justify-between mb-1.5">
+                                <span className="text-zinc-500 dark:text-[#71717a] text-[0.58rem] uppercase tracking-[0.12em] font-bold transition-colors">Composición predial</span>
                             </div>
-                            <div style={{ display: 'flex', height: 7, borderRadius: 99, overflow: 'hidden', background: '#1f1f1f', gap: 1 }}>
+                            <div className="flex h-[7px] rounded-full overflow-hidden bg-zinc-200 dark:bg-[#1f1f1f] gap-px transition-colors">
                                 <div style={{
                                     height: '100%', width: go ? `${ruralPct}%` : '0%',
                                     background: 'linear-gradient(to right, rgba(212,175,55,0.3), rgba(212,175,55,0.55))',
@@ -267,41 +268,41 @@ const PremiumMuniCard: React.FC<PremiumMuniCardProps> = ({ m, go = true }) => {
                                     transition: 'width 1.4s cubic-bezier(0.23,1,0.32,1) 0.12s',
                                 }} />
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-                                <span style={{ color: '#52525b', fontSize: '0.58rem', fontWeight: 600 }}>Rural {ruralPct}%</span>
-                                <span style={{ color: '#52525b', fontSize: '0.58rem', fontWeight: 600 }}>Urbano {100 - ruralPct}%</span>
+                            <div className="flex justify-between mt-1">
+                                <span className="text-zinc-600 dark:text-[#52525b] text-[0.58rem] font-semibold transition-colors">Rural {ruralPct}%</span>
+                                <span className="text-zinc-600 dark:text-[#52525b] text-[0.58rem] font-semibold transition-colors">Urbano {100 - ruralPct}%</span>
                             </div>
                         </div>
 
-                        <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10, margin: '0 16px', position: 'relative' }} />
+                        <div className="h-px bg-zinc-200 dark:bg-white/5 mb-2.5 mx-4 relative transition-colors" />
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 12px', marginBottom: 10, padding: '0 16px', position: 'relative' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '7px 10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontWeight: 700 }}>Rural</p>
-                                <p style={{ color: '#d4d4d8', fontSize: '0.95rem', fontWeight: 700, margin: '2px 0 0', lineHeight: 1 }}>
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 mb-2.5 px-4 relative">
+                            <div className="bg-zinc-100 dark:bg-white/[0.03] rounded-lg px-2.5 py-1.5 border border-zinc-200 dark:border-white/5 transition-colors">
+                                <p className="text-zinc-500 dark:text-[#52525b] text-[0.55rem] uppercase tracking-[0.1em] m-0 font-bold transition-colors">Rural</p>
+                                <p className="text-zinc-900 dark:text-[#d4d4d8] text-[0.95rem] font-bold mt-0.5 leading-none transition-colors">
                                     {m.rural.toLocaleString('es-CO')}
                                 </p>
                             </div>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '7px 10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontWeight: 700 }}>Urbano</p>
-                                <p style={{ color: '#d4d4d8', fontSize: '0.95rem', fontWeight: 700, margin: '2px 0 0', lineHeight: 1 }}>
+                            <div className="bg-zinc-100 dark:bg-white/[0.03] rounded-lg px-2.5 py-1.5 border border-zinc-200 dark:border-white/5 transition-colors">
+                                <p className="text-zinc-500 dark:text-[#52525b] text-[0.55rem] uppercase tracking-[0.1em] m-0 font-bold transition-colors">Urbano</p>
+                                <p className="text-zinc-900 dark:text-[#d4d4d8] text-[0.95rem] font-bold mt-0.5 leading-none transition-colors">
                                     {m.urban.toLocaleString('es-CO')}
                                 </p>
                             </div>
                         </div>
 
-                        <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10, margin: '0 16px', position: 'relative' }} />
+                        <div className="h-px bg-zinc-200 dark:bg-white/5 mb-2.5 mx-4 relative transition-colors" />
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 16px 16px', position: 'relative' }}>
+                        <div className="flex justify-between items-end px-4 pb-4 relative">
                             <div>
-                                <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontWeight: 700 }}>Total Predios</p>
-                                <p style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 900, margin: '2px 0 0', lineHeight: 1 }}>
+                                <p className="text-zinc-500 dark:text-[#52525b] text-[0.55rem] uppercase tracking-[0.1em] m-0 font-bold transition-colors">Total Predios</p>
+                                <p className="text-zinc-900 dark:text-white text-[1.25rem] font-black mt-0.5 leading-none transition-colors">
                                     {total.toLocaleString('es-CO')}
                                 </p>
                             </div>
-                            <div style={{ textAlign: 'right' }}>
-                                <p style={{ color: '#52525b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontWeight: 700 }}>Aporte GS(⅙)</p>
-                                <p style={{ color: '#D4AF37', fontSize: '1.25rem', fontWeight: 900, margin: '2px 0 0', lineHeight: 1 }}>
+                            <div className="text-right">
+                                <p className="text-zinc-500 dark:text-[#52525b] text-[0.55rem] uppercase tracking-[0.1em] m-0 font-bold transition-colors">Aporte GS(⅙)</p>
+                                <p className="text-[#D4AF37] text-[1.25rem] font-black mt-0.5 leading-none">
                                     ~{myShare.toLocaleString('es-CO')}
                                 </p>
                             </div>
