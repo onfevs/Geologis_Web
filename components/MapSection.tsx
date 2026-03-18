@@ -1,21 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fuerza a Leaflet a recalcular el tamaño tras el montaje
-// (necesario cuando el padre usa aspect-ratio en lugar de height fija)
-const MapResizer: React.FC = () => {
-  const map = useMap();
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => map.invalidateSize(), 100),
-      setTimeout(() => map.invalidateSize(), 400),
-      setTimeout(() => map.invalidateSize(), 900),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, [map]);
-  return null;
-};
+import React, { useState } from 'react';
+import { Map, MapMarker, MarkerContent } from './ui/map';
 
 const MapSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -69,29 +53,23 @@ const MapSection: React.FC = () => {
           {/* Vignette Premium Overlay */}
           <div className="absolute inset-0 z-10 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.95)] border border-[#D4AF37]/20 rounded-3xl" />
 
-          <MapContainer
-            center={[5.0689, -75.5174]}
+          <Map
+            theme="dark"
+            center={[-75.5174, 5.0689]}
             zoom={14}
-            scrollWheelZoom={false}
-            attributionControl={false}
-            style={{ height: '100%', minHeight: '320px', width: '100%', background: '#0a0a0a' }}
-            className={`transition-all duration-700 ${isHovered ? 'pointer-events-auto' : 'pointer-events-none'}`}
+            dragPan={false}
+            scrollZoom={false}
+            className={`transition-all duration-700 min-h-[320px] bg-[#0a0a0a] ${isHovered ? 'pointer-events-auto' : 'pointer-events-none'}`}
           >
-            <MapResizer />
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            />
-            <CircleMarker
-              center={[5.0689, -75.5174]}
-              radius={6}
-              pathOptions={{ color: '#D4AF37', fillColor: '#D4AF37', fillOpacity: 1 }}
-            />
-            <CircleMarker
-              center={[5.0689, -75.5174]}
-              radius={24}
-              pathOptions={{ color: '#D4AF37', fillColor: 'transparent', weight: 1, dashArray: '4' }}
-            />
-          </MapContainer>
+            <MapMarker longitude={-75.5174} latitude={5.0689}>
+              <MarkerContent>
+                <div className="relative flex items-center justify-center">
+                  <div className="absolute w-12 h-12 border [&>svg]:hidden border-[#D4AF37] border-dashed rounded-full" />
+                  <div className="w-3 h-3 bg-[#D4AF37] rounded-full shadow-[0_0_10px_#D4AF37]" />
+                </div>
+              </MarkerContent>
+            </MapMarker>
+          </Map>
         </div>
 
         <div className="absolute bottom-6 left-6 z-20 flex items-center justify-center pointer-events-none">
